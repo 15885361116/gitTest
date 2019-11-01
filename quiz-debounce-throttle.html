@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>函数防抖节流</title>
+</head>
+
+<body>
+    <div class="from">
+        没有防抖的 <input type="text" class="ipt1">
+        <br>
+        <br>
+        添加防抖的 <input type="text" class="ipt2">
+        <br>
+        <br>
+        添加节流的 <input type="text" class="ipt3">
+    </div>
+    <div class="box"></div>
+    <script src="./jquery-1.8.3.js"></script>
+    <script>
+
+        function ajax() {
+            $.ajax({
+                url: 'data.php',
+                type: 'get',
+                data: 'input=' + $('.ipt1').val(),
+                datatype: 'text',
+                success: function (data) {
+                    $('.box').append('<div>' + data + '</div>')
+                }
+            });
+        }
+        $('.ipt1').keyup(function () {
+            ajax();
+        })
+
+        //封装函数防抖     debounce  防抖   delay 延迟
+        function debounce(delay, callback) {
+            var timer;
+            return function () {
+                clearTimeout(timer);    //清掉计时器
+                timer = setTimeout(function () {
+                    callback();   //
+                }, delay)
+            }
+        }
+        var debounceAjax = debounce(500, ajax);
+        $('.ipt2').keyup(function () {
+            debounceAjax();
+        })
+
+
+
+        //封装函数节流    throttle  节流
+        function throttle(delay, callback) {
+            var timer, lastTime;
+            return function () {
+                var nowTime = Date.now();     //时间戳    
+                if (lastTime && nowTime < lastTime + 1000){
+                    clearTimeout(timer);
+                    timer = setTimeout(function(){
+                        lastTime = nowTime;
+                        callback();
+                    },delay);
+                }else{
+                    lastTime = nowTime;
+                    callback();
+                }
+            }
+        }
+
+        var throottleAjax = throttle(500,ajax);
+        $('.ipt3').keyup(function(){
+            throottleAjax();
+        })
+
+
+        // 小结：函数防抖是在最后一次事件后触发一次函数，
+        //       函数节流不管出发多频繁，只会在规定时间内执行一次事件函数
+
+        
+    </script>
+</body>
+
+</html>

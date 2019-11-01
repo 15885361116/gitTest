@@ -1,0 +1,74 @@
+@charset "UTF-8";
+// css写法
+// .box{
+//     width: 500px;
+//     height: 200px;
+//     background-color: #eee;
+// }
+// .box .box-titile{
+//     font-size: 20px;
+//     color: red;
+//     text-align: center;
+// }
+// .box .box-con{
+//     font-size: 20px;
+//     color: red;
+//     text-align: center;
+// }
+
+// scss写法
+// 混合器
+@mixin common{
+    &:hover{
+        background-color: #666;
+        color: palegreen;
+    }
+}
+
+
+
+//混合器传参
+@mixin common1($size,$color){
+    font-size: $size;
+    background-color:$color;
+}
+
+
+//继承
+.wrap{
+    width: 900px;
+    height: 200px; 
+}
+.box{
+    margin: 0 auto;
+    // width: 800px;
+    // height: 200px;
+    @extend .wrap;//继承
+    text-align: center;
+    @include common1(20px,#888);
+    &-titile{
+        font-size: 20px;
+        color: red;
+       
+    }
+    &-con{
+        font-size: 20px;
+        // color: red;
+        color:lighten(red,50%);//函数变色
+        text-align: center;
+        @include common;
+    }
+    .box1{
+        height: 100px;
+        text-align: center;
+       @include common1(19px,#ccc);//混合传参
+        p{
+            font-size: 20px;
+            color: aqua;
+            @include common;
+        }
+    }
+
+}
+
+@import 'test1';//引入外部文件(test.scss)
